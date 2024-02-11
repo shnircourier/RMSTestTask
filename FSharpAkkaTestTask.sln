@@ -2,6 +2,8 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "FSharpAkkaTestTask", "FSharpAkkaTestTask\FSharpAkkaTestTask.fsproj", "{C148B881-1A8D-4E60-AC56-8DFE762A3588}"
 EndProject
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "FSharpAkkaTestTask.Tests", "FSharpAkkaTestTask.Tests\FSharpAkkaTestTask.Tests.fsproj", "{486299D0-E0AD-4C74-A731-52AC0B490A51}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -12,5 +14,9 @@ Global
 		{C148B881-1A8D-4E60-AC56-8DFE762A3588}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C148B881-1A8D-4E60-AC56-8DFE762A3588}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C148B881-1A8D-4E60-AC56-8DFE762A3588}.Release|Any CPU.Build.0 = Release|Any CPU
+		{486299D0-E0AD-4C74-A731-52AC0B490A51}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{486299D0-E0AD-4C74-A731-52AC0B490A51}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{486299D0-E0AD-4C74-A731-52AC0B490A51}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{486299D0-E0AD-4C74-A731-52AC0B490A51}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
