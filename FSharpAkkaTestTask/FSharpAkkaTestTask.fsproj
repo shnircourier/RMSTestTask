@@ -6,6 +6,8 @@
     </PropertyGroup>
 
     <ItemGroup>
+        <Compile Include="ConsoleResponseLog.fs" />
+        <Compile Include="HttpRequestSender.fs" />
         <Compile Include="Program.fs"/>
     </ItemGroup>
 
