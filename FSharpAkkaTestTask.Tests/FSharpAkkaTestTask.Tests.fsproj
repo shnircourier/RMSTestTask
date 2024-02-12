@@ -10,6 +10,7 @@
 
     <ItemGroup>
         <Compile Include="ConsoleResponseLogUnitTest.fs" />
+        <Compile Include="HttpRequestSenderUnitTest.fs" />
         <Compile Include="Program.fs"/>
     </ItemGroup>
 

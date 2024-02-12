@@ -29,7 +29,7 @@ let main _ =
         async {
             let! httpResponse = httpActor <? HttpRequestSenderType.RequestMessage("https://jsonplaceholder.typicode.com/todos/1", HttpMethod.Get)
             match httpResponse with
-            | ResponseBody body -> if body.StatusCode = 200 then loggerActor <! body.ResponseBody
+            | ResponseBody body -> if body.StatusCode = 200 then loggerActor <! body.Body
             | CancelRequestBody id -> printfn $"Request with id: {id} stopped!"
         } |> Async.RunSynchronously
         

@@ -9,7 +9,7 @@ type HttpRequestSenderType =
         | RequestMessage of string * HttpMethod
         | CancelRequestMessage
         
-type HttpResponseBodyType = { StatusCode: int; ResponseBody: string }
+type HttpResponseBodyType = { StatusCode: int; Body: string }
 
 type HttpResponseSenderType =
         | ResponseBody of HttpResponseBodyType
@@ -23,7 +23,7 @@ let httpRequestSender (httpClient: HttpClient, cancellationTokenSource: Cancella
                                 let request = new HttpRequestMessage(method, url)
                                 let! response = httpClient.SendAsync(request, cancellationTokenSource.Token) |> Async.AwaitTask
                                 let! responseBody = response.Content.ReadAsStringAsync() |> Async.AwaitTask 
-                                return HttpResponseSenderType.ResponseBody({ StatusCode = int response.StatusCode; ResponseBody = responseBody })
+                                return HttpResponseSenderType.ResponseBody({ StatusCode = int response.StatusCode; Body = responseBody })
                         with
                         | :? System.Threading.Tasks.TaskCanceledException as _ -> return HttpResponseSenderType.CancelRequestBody(cancellationTokenSource.Token.GetHashCode().ToString())
                 } |> Async.RunSynchronously
