@@ -1,31 +1,32 @@
 ﻿module HttpRequestSender
 
-open System.Net
 open System.Threading
-open Akka.Actor
 open Akka.FSharp
 open System.Net.Http
-open ConsoleResponseLog
+open Microsoft.FSharp.Core
 
-type HttpRequestSenderMessageType =
+type HttpRequestSenderType =
         | RequestMessage of string * HttpMethod
         | CancelRequestMessage
+        
+type HttpResponseBodyType = { StatusCode: int; ResponseBody: string }
 
-let httpRequestSender (httpClient: HttpClient, cancellationTokenSource: CancellationTokenSource, system: ActorSystem) (msg: HttpRequestSenderMessageType) =
+type HttpResponseSenderType =
+        | ResponseBody of HttpResponseBodyType
+        | CancelRequestBody of string
+
+let httpRequestSender (httpClient: HttpClient, cancellationTokenSource: CancellationTokenSource) (msg: HttpRequestSenderType) =
         match msg with
         | RequestMessage(url, method) ->
                 async {
                         try
                                 let request = new HttpRequestMessage(method, url)
                                 let! response = httpClient.SendAsync(request, cancellationTokenSource.Token) |> Async.AwaitTask
-                                let _ = response.EnsureSuccessStatusCode()
-                                match response.StatusCode with
-                                | HttpStatusCode.OK ->
-                                        let! responseBody = response.Content.ReadAsStringAsync() |> Async.AwaitTask
-                                        let consoleResponseLogActor = spawn system "log" (actorOf consoleResponseLog)
-                                        consoleResponseLogActor.Tell <| responseBody
-                                | _ -> failwith $"Status Code is not indicate OK(200). Status Code: {int response.StatusCode}"
+                                let! responseBody = response.Content.ReadAsStringAsync() |> Async.AwaitTask 
+                                return HttpResponseSenderType.ResponseBody({ StatusCode = int response.StatusCode; ResponseBody = responseBody })
                         with
-                        | ex -> printfn $"error by making request to {url} with method {method}\n{ex.Message}"
+                        | :? System.Threading.Tasks.TaskCanceledException as _ -> return HttpResponseSenderType.CancelRequestBody(cancellationTokenSource.Token.GetHashCode().ToString())
                 } |> Async.RunSynchronously
-        | CancelRequestMessage -> cancellationTokenSource.Cancel()
+        | CancelRequestMessage ->
+                cancellationTokenSource.Cancel()
+                HttpResponseSenderType.CancelRequestBody(cancellationTokenSource.Token.GetHashCode().ToString())
